@@ -1,0 +1,22 @@
+zend_extension=/usr/lib/php5/20090626/xdebug.so
+
+xdebug.remote_enable=1
+xdebug.remote_handler=dbgp
+xdebug.remote_mode=req
+xdebug.remote_connect_back=1
+xdebug.remote_port=9000
+
+xdebug.max_nesting_level=200
+
+; xdebug.profiler_enable=On
+; xdebug.profiler_enable_trigger=On
+; xdebug.profiler_output_dir="/var/log/profiles"
+; xdebug.profiler_output_name="%H.%R"
+; xdebug.profiler_append=On
+
+; xdebug.auto_trace=On
+; xdebug.trace_output_dir="/var/log/traces"
+; xdebug.trace_output_name="%H.%R"
+
+[ZendModules]
+Xdebug
