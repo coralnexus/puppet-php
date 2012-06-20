@@ -9,8 +9,6 @@ class php::apache2(
 
   #-----------------------------------------------------------------------------
 
-  require apache
-
   class { 'php::apache2::install':
     apache_package_version => $apache_package_version,
   }

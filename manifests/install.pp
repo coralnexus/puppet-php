@@ -19,7 +19,7 @@ class php::install (
 
   #-----------------------------------------------------------------------------
 
-  exec { "php-pear-update":
+  exec { 'php-pear-update':
     command => "/usr/bin/pear update-channels",
     require => Package[$php::params::pear_package_name]
   }

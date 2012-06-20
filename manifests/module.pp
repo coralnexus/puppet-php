@@ -13,9 +13,7 @@ define php::module (
 
   #-----------------------------------------------------------------------------
 
-  include php
   include php::params
-  include php::install
 
   $file_name = "${name}.ini"
 
@@ -70,6 +68,6 @@ define php::module (
       },
       default => undef,
     },
-    require => Package["php-${name}"],
+    require => [ File[$php::params::conf_dir], Package["php-${name}"] ],
   }
 }

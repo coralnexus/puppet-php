@@ -3,6 +3,9 @@ class php::params {
 
   #-----------------------------------------------------------------------------
 
+  $use_apc    = true
+  $use_xdebug = false
+
   case $::operatingsystem {
     /(Ubuntu|Debian)/: {
       $base_dir               = "/etc/php5/"

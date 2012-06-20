@@ -1,6 +1,8 @@
 
 class php (
 
+  $use_apc              = $php::params::use_apc,
+  $use_xdebug           = $php::params::use_xdebug,
   $cli_package_version  = $php::params::cli_package_version,
   $cli_ini_source       = $php::params::cli_ini_source,
   $cli_ini_content      = $php::params::cli_ini_content,
@@ -16,6 +18,8 @@ class php (
   }
 
   class { 'php::config':
+    use_apc         => $use_apc,
+    use_xdebug      => $use_xdebug,
     cli_ini_source  => $cli_ini_source,
     cli_ini_content => $cli_ini_content,
   }
