@@ -83,8 +83,8 @@
   "php_cli_iconv_output_encoding" : "ISO-8859-1",
   "php_cli_intl_default_locale" : "",
   "php_cli_intl_error_level" : "E_WARNING",
-  "php_cli_pcre_backtrack_limit" : "100000
-  "php_cli_pcre_recursion_limit" : "100000
+  "php_cli_pcre_backtrack_limit" : "100000",
+  "php_cli_pcre_recursion_limit" : "100000",
   "php_cli_phar_readonly" : "On",
   "php_cli_phar_require_hash" : "On",
   "php_cli_phar_cache_list" : "",
@@ -218,8 +218,8 @@
   "php_apache_iconv_output_encoding" : "ISO-8859-1",
   "php_apache_intl_default_locale" : "",
   "php_apache_intl_error_level" : "E_WARNING",
-  "php_apache_pcre_backtrack_limit" : "100000
-  "php_apache_pcre_recursion_limit" : "100000
+  "php_apache_pcre_backtrack_limit" : "100000",
+  "php_apache_pcre_recursion_limit" : "100000",
   "php_apache_phar_readonly" : "On",
   "php_apache_phar_require_hash" : "On",
   "php_apache_phar_cache_list" : "",
