@@ -1,34 +1,28 @@
-define php::conf($ensure = present, $source = undef, $content = undef, $require = undef, $notify = undef) {
-    include php
 
-    $file_name = "${name}.ini"
+define php::conf (
 
-    # Puppet will bail out if both source and content is set,
-    # hence we don't have to deal with it.
-    file { $file_name:
-        path    => "${php::params::conf_dir}${file_name}",
-        mode    => 644,
-        owner   => root,
-        group   => root,
-        ensure  => $ensure,
-        notify  => $notify,
-        require => $require ? {
-            undef   => Class['php'],
-            default => [ Class['php'], $require, ],
-        },
-        source  => $source ? {
-            undef   => undef,
-            true    => [
-                "puppet:///files/${fqdn}/etc/php5/conf.d/${file_name}",
-                "puppet:///files/${hostgroup}/etc/php5/conf.d/${file_name}",
-                "puppet:///files/${domain}/etc/php5/conf.d/${file_name}",
-                "puppet:///files/global/etc/php5/conf.d/${file_name}",
-            ],
-            default => "${source}${file_name}",
-        },
-        content => $content ? {
-            undef   => undef,
-            default => template("${content}${file_name}.erb"),
-        },
+  $ensure   = 'present',
+  $content  = '',
+  $conf_dir = $php::params::os_conf_dir,
+  $require  = undef,
+  $notify   = undef,
+
+) {
+
+  include php
+
+  #-----------------------------------------------------------------------------
+
+  if $content {
+    file { "php-conf-${name}":
+      path    => "${conf_dir}/${name}.ini",
+      ensure  => $ensure,
+      content => $content,
+      require => $require ? {
+        undef   => File['php-conf-dir'],
+        default => flatten([ File['php-conf-dir'], $require ]),
+      },
+      notify  => $notify,
     }
+  }
 }

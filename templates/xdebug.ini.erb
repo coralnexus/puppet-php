@@ -1,22 +1,19 @@
-zend_extension=/usr/lib/php5/20090626/xdebug.so
+zend_extension = <%= zend_extension %>
 
-xdebug.remote_enable=1
-xdebug.remote_handler=dbgp
-xdebug.remote_mode=req
-xdebug.remote_connect_back=1
-xdebug.remote_port=9000
+xdebug.remote_enable = <%= xdebug_remote_enable %>
+xdebug.remote_handler = <%= xdebug_remote_handler %>
+xdebug.remote_mode = <%= xdebug_remote_mode %>
+xdebug.remote_connect_back = <%= xdebug_remote_connect_back %>
+xdebug.remote_port = <%= xdebug_remote_port %>
 
-xdebug.max_nesting_level=200
+xdebug.max_nesting_level = <%= xdebug_max_nesting_level %>
 
-; xdebug.profiler_enable=On
-; xdebug.profiler_enable_trigger=On
-; xdebug.profiler_output_dir="/var/log/profiles"
-; xdebug.profiler_output_name="%H.%R"
-; xdebug.profiler_append=On
+xdebug.profiler_enable = <%= xdebug_profiler_enable %>
+xdebug.profiler_enable_trigger = <%= xdebug_profiler_enable_trigger %>
+xdebug.profiler_output_dir = "<%= xdebug_profiler_output_dir -%>"
+xdebug.profiler_output_name = "<%= xdebug_profiler_output_name -%>"
+xdebug.profiler_append = <%= xdebug_profiler_append %>
 
-; xdebug.auto_trace=On
-; xdebug.trace_output_dir="/var/log/traces"
-; xdebug.trace_output_name="%H.%R"
-
-[ZendModules]
-Xdebug
+xdebug.auto_trace = <%= xdebug_auto_trace %>
+xdebug.trace_output_dir = "<%= xdebug_trace_output_dir -%>"
+xdebug.trace_output_name = "<%= xdebug_trace_output_name -%>"

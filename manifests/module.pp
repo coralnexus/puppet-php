@@ -2,72 +2,65 @@
 define php::module (
 
   $ensure         = 'present',
-  $provider       = '',
-  $source         = undef,
-  $content        = undef,
+  $package_prefix = '',
+  $extra_packages = '',
+  $extra_ensure   = 'present',
+  $content        = '',
+  $provider       = undef,
+  $conf_dir       = $php::params::os_conf_dir,
   $require        = undef,
   $notify         = undef,
-  $package_prefix = '',
 
 ) {
 
-  #-----------------------------------------------------------------------------
-
-  include php::params
-
-  $file_name = "${name}.ini"
-
-  if $require {
-    $real_require = [ Class['php::install'], $require, ]
-  } else {
-    $real_require = Class['php::install']
-  }
-
-  Package {
-    ensure  => $ensure,
-    require => $real_require,
-  }
-
-  if $provider == 'pear' or $provider == 'pecl' {
-    package { "php-${name}":
-      name     => "${package_prefix}${name}",
-      provider => $provider,
-    }
-
-    if $provider == 'pecl' {
-      $include_statement = "extension=${package_prefix}${name}.so"
-    }
-  }
-  else {
-    package { "php-${name}": name => "${package_prefix}${name}", }
-  }
+  include php
 
   #-----------------------------------------------------------------------------
+  # Installation
 
-  file { $file_name:
-    path    => "${php::params::conf_dir}${file_name}",
-    mode    => 644,
-    owner   => root,
-    group   => root,
-    ensure  => $ensure,
-    notify  => $notify,
-    source  => $source ? {
-      undef => undef,
-      true  => [
-        "puppet:///files/${fqdn}/etc/php5/conf.d/${file_name}",
-        "puppet:///files/${hostgroup}/etc/php5/conf.d/${file_name}",
-        "puppet:///files/${domain}/etc/php5/conf.d/${file_name}",
-        "puppet:///files/global/etc/php5/conf.d/${file_name}",
-      ],
-      default => "${source}${file_name}",
-    },
-    content => $source ? {
-      undef   => $content ? {
-        undef   => $include_statement,
-        default => template("${content}"),
+  if $ensure != undef {
+    $real_require = $require ? {
+      undef   => File['php-conf-dir'],
+      default => flatten([ File['php-conf-dir'], $require ]),
+    }
+
+    Package {
+      ensure  => $ensure,
+      require => $real_require,
+    }
+
+    if $provider == 'pear' or $provider == 'pecl' {
+      package { "php-${name}":
+        name     => "${package_prefix}${name}",
+        provider => $provider,
+      }
+    }
+    else {
+      package { "php-${name}": name => "${package_prefix}${name}" }
+    }
+  }
+
+  #---
+
+  if $extra_packages {
+    package { "php-extra-${name}":
+      name    => $extra_packages,
+      ensure  => $extra_ensure,
+      require => Package["php-${name}"],
+    }
+  }
+
+  #-----------------------------------------------------------------------------
+  # Configuration
+
+  if $content != undef {
+    php::conf { "php-module-${name}":
+      conf_dir => $conf_dir,
+      content  => $content ? {
+        ''       => "extension=${package_prefix}${name}.so",
+        default  => $content,
       },
-      default => undef,
-    },
-    require => [ File[$php::params::conf_dir], Package["php-${name}"] ],
+      notify   => $notify,
+    }
   }
 }
