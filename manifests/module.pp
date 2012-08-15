@@ -1,15 +1,14 @@
 
 define php::module (
 
-  $ensure         = 'present',
-  $package_prefix = '',
-  $extra_packages = '',
-  $extra_ensure   = 'present',
-  $content        = '',
-  $provider       = undef,
-  $conf_dir       = $php::params::os_conf_dir,
+  $ensure         = $php::params::module_ensure,
+  $package_prefix = $php::params::module_package_prefix,
+  $extra_packages = [],
+  $extra_ensure   = $php::params::module_extra_ensure,
+  $content        = $php::params::module_content,
+  $provider       = $php::params::module_provider,
+  $conf_dir       = $php::params::conf_dir,
   $require        = undef,
-  $notify         = undef,
 
 ) {
 
@@ -42,7 +41,7 @@ define php::module (
 
   #---
 
-  if $extra_packages {
+  if ! empty($extra_packages) {
     package { "php-extra-${name}":
       name    => $extra_packages,
       ensure  => $extra_ensure,
@@ -54,13 +53,12 @@ define php::module (
   # Configuration
 
   if $content != undef {
-    php::conf { "php-module-${name}":
+    php::conf { $name:
       conf_dir => $conf_dir,
       content  => $content ? {
         ''       => "extension=${package_prefix}${name}.so",
         default  => $content,
       },
-      notify   => $notify,
     }
   }
 }

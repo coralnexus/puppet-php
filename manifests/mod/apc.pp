@@ -1,9 +1,10 @@
 
 class php::mod::apc (
 
-  $ensure                     = $php::params::apc::apc_ensure,
-  $packages                   = $php::params::apc::os_apc_packages,
-  $conf_dir                   = $php::params::os_conf_dir,
+  $ensure                     = $php::params::apc::ensure,
+  $packages                   = $php::params::apc::packages,
+  $conf_dir                   = $php::params::conf_dir,
+  $template                   = $php::params::apc::template,
   $apc_enabled                = $php::params::apc::apc_enabled,
   $apc_shm_segments           = $php::params::apc::apc_shm_segments,
   $apc_shm_size               = $php::params::apc::apc_shm_size,
@@ -15,7 +16,7 @@ class php::mod::apc (
   $apc_gc_ttl                 = $php::params::apc::apc_gc_ttl,
   $apc_cache_by_default       = $php::params::apc::apc_cache_by_default,
   $apc_filters                = $php::params::apc::apc_filters,
-  $apc_mmap_file_mask         = $php::params::apc::os_apc_mmap_file_mask,
+  $apc_mmap_file_mask         = $php::params::apc::apc_mmap_file_mask,
   $apc_file_update_protection = $php::params::apc::apc_file_update_protection,
   $apc_enable_cli             = $php::params::apc::apc_enable_cli,
   $apc_max_file_size          = $php::params::apc::apc_max_file_size,
@@ -32,7 +33,6 @@ class php::mod::apc (
   $apc_include_once_override  = $php::params::apc::apc_include_once_override,
   $apc_lazy_classes           = $php::params::apc::apc_lazy_classes,
   $apc_lazy_functions         = $php::params::apc::apc_lazy_functions,
-  $template                   = $php::params::apc::os_apc_template,
 
 ) inherits php::params::apc {
 

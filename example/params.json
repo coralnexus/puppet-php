@@ -2,7 +2,6 @@
   "php_cli_ensure" : "present",
   "php_extra_ensure" : "present",
   "php_pear_ensure" : "present",
-  "php_module_ensure" : "present",
   "php_module_packages" : [],
   "php_pear_module_packages" : [],
   "php_pecl_module_packages" : [],
@@ -347,5 +346,10 @@
   "php_mysqli_default_pw" : "",
   "php_mysqli_reconnect" : "Off",
   "php_pdo_mysql_cache_size" : "2000",
-  "php_pdo_mysql_default_socket" : ""
+  "php_pdo_mysql_default_socket" : "",
+  "php_module_ensure" : "present",
+  "php_module_package_prefix" : "",
+  "php_module_extra_ensure" : "present",
+  "php_module_content" : "",
+  "php_module_provider" : "",
 }

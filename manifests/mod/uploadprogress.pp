@@ -2,7 +2,7 @@
 class php::mod::uploadprogress (
 
   $ensure   = $php::params::module_ensure,
-  $conf_dir = $php::params::os_conf_dir,
+  $conf_dir = $php::params::conf_dir,
 
 ) inherits php::params {
 

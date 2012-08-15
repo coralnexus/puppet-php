@@ -3,9 +3,8 @@ define php::conf (
 
   $ensure   = 'present',
   $content  = '',
-  $conf_dir = $php::params::os_conf_dir,
+  $conf_dir = $php::params::conf_dir,
   $require  = undef,
-  $notify   = undef,
 
 ) {
 
@@ -22,7 +21,6 @@ define php::conf (
         undef   => File['php-conf-dir'],
         default => flatten([ File['php-conf-dir'], $require ]),
       },
-      notify  => $notify,
     }
   }
 }

@@ -1,10 +1,11 @@
 
 class php::mod::mysql (
 
-  $package                           = $php::params::mysql::os_mysql_package,
-  $ensure                            = $php::params::mysql::mysql_ensure,
-  $conf_dir                          = $php::params::os_conf_dir,
-  $module_configs                    = $php::params::mysql::os_module_configs,
+  $package                           = $php::params::mysql::package,
+  $ensure                            = $php::params::mysql::ensure,
+  $conf_dir                          = $php::params::conf_dir,
+  $template                          = $php::params::mysql::template,
+  $module_configs                    = $php::params::mysql::module_configs,
   $sql_safe_mode                     = $php::params::mysql::sql_safe_mode,
   $mysqlnd_collect_statistics        = $php::params::mysql::mysqlnd_collect_statistics,
   $mysqlnd_collect_memory_statistics = $php::params::mysql::mysqlnd_collect_memory_statistics,
@@ -35,7 +36,6 @@ class php::mod::mysql (
   $mysqli_reconnect                  = $php::params::mysql::mysqli_reconnect,
   $pdo_mysql_cache_size              = $php::params::mysql::pdo_mysql_cache_size,
   $pdo_mysql_default_socket          = $php::params::mysql::pdo_mysql_default_socket,
-  $template                          = $php::params::mysql::os_mysql_template,
 
 ) inherits php::params::mysql {
 

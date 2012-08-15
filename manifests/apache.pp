@@ -1,10 +1,12 @@
 
 class php::apache (
 
-  $php_apache_package                 = $php::params::apache::os_php_apache_package,
-  $php_apache_ensure                  = $php::params::apache::php_apache_ensure,
-  $apache_dir                         = $php::params::apache::os_apache_dir,
-  $apache_ini                         = $php::params::apache::os_apache_ini,
+  $package                            = $php::params::apache::package,
+  $ensure                             = $php::params::apache::ensure,
+  $service                            = $php::params::apache::service,
+  $apache_config_dir                  = $php::params::apache::apache_config_dir,
+  $apache_ini                         = $php::params::apache::apache_ini,
+  $apache_ini_template                = $php::params::apache::apache_ini_template,
   $user_ini_filename                  = $php::params::apache::user_ini_filename,
   $user_ini_cache_ttl                 = $php::params::apache::user_ini_cache_ttl,
   $short_open_tag                     = $php::params::apache::short_open_tag,
@@ -54,16 +56,17 @@ class php::apache (
   $post_max_size                      = $php::params::apache::post_max_size,
   $magic_quotes_gpc                   = $php::params::apache::magic_quotes_gpc,
   $magic_quotes_runtime               = $php::params::apache::magic_quotes_runtime,
+  $magic_quotes_sybase                = $php::params::apache::magic_quotes_sybase,
   $auto_prepend_file                  = $php::params::apache::auto_prepend_file,
   $auto_append_file                   = $php::params::apache::auto_append_file,
   $default_mimetype                   = $php::params::apache::default_mimetype,
   $default_charset                    = $php::params::apache::default_charset,
   $always_populate_raw_post_data      = $php::params::apache::always_populate_raw_post_data,
-  $doc_root                           = $php::params::os_doc_root,
-  $user_dir                           = $php::params::os_user_dir,
+  $doc_root                           = $php::params::doc_root,
+  $user_dir                           = $php::params::user_dir,
   $enable_dl                          = $php::params::apache::enable_dl,
   $file_uploads                       = $php::params::apache::file_uploads,
-  $upload_tmp_dir                     = $php::params::os_upload_tmp_dir,
+  $upload_tmp_dir                     = $php::params::upload_tmp_dir,
   $upload_max_filesize                = $php::params::apache::upload_max_filesize,
   $max_file_uploads                   = $php::params::apache::max_file_uploads,
   $allow_url_fopen                    = $php::params::apache::allow_url_fopen,
@@ -97,7 +100,7 @@ class php::apache (
   $bcmath_scale                       = $php::params::apache::bcmath_scale,
   $browscap                           = $php::params::apache::browscap,
   $session_save_handler               = $php::params::apache::session_save_handler,
-  $session_save_path                  = $php::params::os_session_save_path,
+  $session_save_path                  = $php::params::session_save_path,
   $session_use_cookies                = $php::params::apache::session_use_cookies,
   $session_cookie_secure              = $php::params::apache::session_cookie_secure,
   $session_use_only_cookies           = $php::params::apache::session_use_only_cookies,
@@ -114,7 +117,7 @@ class php::apache (
   $session_bug_compat_42              = $php::params::apache::session_bug_compat_42,
   $session_bug_compat_warn            = $php::params::apache::session_bug_compat_warn,
   $session_referer_check              = $php::params::apache::session_referer_check,
-  $session_entropy_file               = $php::params::os_session_entropy_file,
+  $session_entropy_file               = $php::params::session_entropy_file,
   $session_entropy_length             = $php::params::apache::session_entropy_length,
   $session_cache_limiter              = $php::params::apache::session_cache_limiter,
   $session_cache_expire               = $php::params::apache::session_cache_expire,
@@ -141,11 +144,9 @@ class php::apache (
   $mbstring_script_encoding           = $php::params::apache::mbstring_script_encoding,
   $gd_jpeg_ignore_warning             = $php::params::apache::gd_jpeg_ignore_warning,
   $soap_wsdl_cache_enabled            = $php::params::apache::soap_wsdl_cache_enabled,
-  $soap_wsdl_cache_dir                = $php::params::os_soap_wsdl_cache_dir,
+  $soap_wsdl_cache_dir                = $php::params::soap_wsdl_cache_dir,
   $soap_wsdl_cache_ttl                = $php::params::apache::soap_wsdl_cache_ttl,
   $soap_wsdl_cache_limit              = $php::params::apache::soap_wsdl_cache_limit,
-  $apache_ini_template                = $php::params::apache::os_apache_ini_template,
-  $apache_service                     = $php::params::apache::apache_service,
 
 ) inherits php::params::apache {
 
@@ -153,12 +154,12 @@ class php::apache (
 
   #-----------------------------------------------------------------------------
 
-  if defined(Service[$apache_service]) {
+  if defined(Service[$service]) {
     Package {
-      notify => Service[$apache_service],
+      notify => Service[$service],
     }
     File {
-      notify => Service[$apache_service],
+      notify => Service[$service],
     }
   }
 
@@ -166,8 +167,8 @@ class php::apache (
   # Installation
 
   package { 'php-apache':
-    name    => $php_apache_package,
-    ensure  => $php_apache_ensure,
+    name    => $package,
+    ensure  => $ensure,
     require => Class['php'],
   }
 
@@ -175,7 +176,7 @@ class php::apache (
   # Configuration
 
   file { 'php-apache-dir':
-    path    => $apache_dir,
+    path    => $apache_config_dir,
     ensure  => directory,
     require => Package['php-apache'],
   }

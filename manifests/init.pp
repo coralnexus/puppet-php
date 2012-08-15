@@ -1,19 +1,20 @@
 
 class php (
 
-  $cli_package                        = $php::params::os_php_cli_package,
-  $cli_ensure                         = $php::params::php_cli_ensure,
-  $extra_packages                     = $php::params::os_php_extra_packages,
-  $extra_ensure                       = $php::params::php_extra_ensure,
-  $pear_package                       = $php::params::os_pear_package,
+  $cli_package                        = $php::params::cli_package,
+  $cli_ensure                         = $php::params::cli_ensure,
+  $extra_packages                     = $php::params::extra_packages,
+  $extra_ensure                       = $php::params::extra_ensure,
+  $pear_package                       = $php::params::pear_package,
   $pear_ensure                        = $php::params::pear_ensure,
   $module_ensure                      = $php::params::module_ensure,
-  $php_module_packages                = $php::params::php_module_packages,
+  $module_packages                    = $php::params::module_packages,
   $pear_module_packages               = $php::params::pear_module_packages,
   $pecl_module_packages               = $php::params::pecl_module_packages,
-  $conf_dir                           = $php::params::os_conf_dir,
-  $cli_dir                            = $php::params::os_cli_dir,
-  $cli_ini                            = $php::params::os_cli_ini,
+  $conf_dir                           = $php::params::conf_dir,
+  $cli_dir                            = $php::params::cli_dir,
+  $cli_ini                            = $php::params::cli_ini,
+  $cli_ini_template                   = $php::params::cli_ini_template,
   $user_ini_filename                  = $php::params::user_ini_filename,
   $user_ini_cache_ttl                 = $php::params::user_ini_cache_ttl,
   $short_open_tag                     = $php::params::short_open_tag,
@@ -63,16 +64,17 @@ class php (
   $post_max_size                      = $php::params::post_max_size,
   $magic_quotes_gpc                   = $php::params::magic_quotes_gpc,
   $magic_quotes_runtime               = $php::params::magic_quotes_runtime,
+  $magic_quotes_sybase                = $php::params::magic_quotes_sybase,
   $auto_prepend_file                  = $php::params::auto_prepend_file,
   $auto_append_file                   = $php::params::auto_append_file,
   $default_mimetype                   = $php::params::default_mimetype,
   $default_charset                    = $php::params::default_charset,
   $always_populate_raw_post_data      = $php::params::always_populate_raw_post_data,
-  $doc_root                           = $php::params::os_doc_root,
-  $user_dir                           = $php::params::os_user_dir,
+  $doc_root                           = $php::params::doc_root,
+  $user_dir                           = $php::params::user_dir,
   $enable_dl                          = $php::params::enable_dl,
   $file_uploads                       = $php::params::file_uploads,
-  $upload_tmp_dir                     = $php::params::os_upload_tmp_dir,
+  $upload_tmp_dir                     = $php::params::upload_tmp_dir,
   $upload_max_filesize                = $php::params::upload_max_filesize,
   $max_file_uploads                   = $php::params::max_file_uploads,
   $allow_url_fopen                    = $php::params::allow_url_fopen,
@@ -106,7 +108,7 @@ class php (
   $bcmath_scale                       = $php::params::bcmath_scale,
   $browscap                           = $php::params::browscap,
   $session_save_handler               = $php::params::session_save_handler,
-  $session_save_path                  = $php::params::os_session_save_path,
+  $session_save_path                  = $php::params::session_save_path,
   $session_use_cookies                = $php::params::session_use_cookies,
   $session_cookie_secure              = $php::params::session_cookie_secure,
   $session_use_only_cookies           = $php::params::session_use_only_cookies,
@@ -123,7 +125,7 @@ class php (
   $session_bug_compat_42              = $php::params::session_bug_compat_42,
   $session_bug_compat_warn            = $php::params::session_bug_compat_warn,
   $session_referer_check              = $php::params::session_referer_check,
-  $session_entropy_file               = $php::params::os_session_entropy_file,
+  $session_entropy_file               = $php::params::session_entropy_file,
   $session_entropy_length             = $php::params::session_entropy_length,
   $session_cache_limiter              = $php::params::session_cache_limiter,
   $session_cache_expire               = $php::params::session_cache_expire,
@@ -150,10 +152,9 @@ class php (
   $mbstring_script_encoding           = $php::params::mbstring_script_encoding,
   $gd_jpeg_ignore_warning             = $php::params::gd_jpeg_ignore_warning,
   $soap_wsdl_cache_enabled            = $php::params::soap_wsdl_cache_enabled,
-  $soap_wsdl_cache_dir                = $php::params::os_soap_wsdl_cache_dir,
+  $soap_wsdl_cache_dir                = $php::params::soap_wsdl_cache_dir,
   $soap_wsdl_cache_ttl                = $php::params::soap_wsdl_cache_ttl,
   $soap_wsdl_cache_limit              = $php::params::soap_wsdl_cache_limit,
-  $cli_ini_template                   = $php::params::os_cli_ini_template,
 
 ) inherits php::params {
 
@@ -190,8 +191,8 @@ class php (
 
   #---
 
-  if $php_module_packages {
-    php::module { $php_module_packages:
+  if $module_packages {
+    php::module { $module_packages:
       ensure => $module_ensure,
     }
   }

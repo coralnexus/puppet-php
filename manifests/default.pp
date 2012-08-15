@@ -1,12 +1,13 @@
 
 class php::default {
-  $php_cli_ensure                     = 'present'
-  $php_extra_ensure                   = 'present'
+
+  $cli_ensure                         = 'present'
+  $extra_ensure                       = 'present'
   $pear_ensure                        = 'present'
-  $module_ensure                      = 'present'
-  $php_module_packages                = []
+  $module_packages                    = []
   $pear_module_packages               = []
   $pecl_module_packages               = []
+
   $user_ini_filename                  = ".user.ini"
   $user_ini_cache_ttl                 = 300
   $short_open_tag                     = 'Off'
@@ -96,6 +97,7 @@ class php::default {
   $mail_log                           = ''
   $bcmath_scale                       = 0
   $browscap                           = ''
+
   $session_save_handler               = 'files'
   $session_use_cookies                = 1
   $session_cookie_secure              = ''
@@ -119,13 +121,17 @@ class php::default {
   $session_use_trans_sid              = 0
   $session_hash_function              = 0
   $session_hash_bits_per_character    = 5
+
   $url_rewriter_tags                  = 'a=href,area=href,frame=src,input=src,form=fakeentry'
+
   $assert_active                      = 'On'
   $assert_warning                     = 'On'
   $assert_bail                        = 'Off'
   $assert_callback                    = 0
   $assert_quiet_eval                  = 0
+
   $sysvshm_init_mem                   = 10000
+
   $mbstring_language                  = 'Neutral'
   $mbstring_internal_encoding         = 'UTF-8'
   $mbstring_http_input                = 'auto'
@@ -138,11 +144,14 @@ class php::default {
   $mbstring_http_output_conv_mimetype = ''
   $mbstring_script_encoding           = ''
   $gd_jpeg_ignore_warning             = 0
+
   $soap_wsdl_cache_enabled            = 1
   $soap_wsdl_cache_ttl                = 86400
   $soap_wsdl_cache_limit              = 5
-  $php_apache_ensure                  = 'present'
+
+  $apache_ensure                      = 'present'
   $apache_service                     = 'apache'
+
   $xdebug_ensure                      = 'present'
   $xdebug_remote_enable               = 1
   $xdebug_remote_handler              = 'dbgp'
@@ -156,6 +165,7 @@ class php::default {
   $xdebug_profiler_append             = 'On'
   $xdebug_auto_trace                  = 'On'
   $xdebug_trace_output_name           = '%H.%R'
+
   $apc_ensure                         = 'present'
   $apc_enabled                        = 1
   $apc_shm_segments                   = 1
@@ -184,12 +194,16 @@ class php::default {
   $apc_include_once_override          = 0
   $apc_lazy_classes                   = 0
   $apc_lazy_functions                 = 0
+
   $mysql_ensure                       = 'present'
+
   $sql_safe_mode                      = 'Off'
+
   $mysqlnd_collect_statistics         = 'On'
   $mysqlnd_collect_memory_statistics  = 'Off'
   $mysqlnd_net_cmd_buffer_size        = 2048
   $mysqlnd_net_read_buffer_size       = 32768
+
   $mysql_allow_local_infile           = 'On'
   $mysql_allow_persistent             = 'On'
   $mysql_cache_size                   = 2000
@@ -202,6 +216,7 @@ class php::default {
   $mysql_default_password             = ''
   $mysql_connect_timeout              = 60
   $mysql_trace_mode                   = 'Off'
+
   $mysqli_max_persistent              = -1
   $mysqli_allow_local_infile          = 'On'
   $mysqli_allow_persistent            = 'On'
@@ -213,6 +228,61 @@ class php::default {
   $mysqli_default_user                = ''
   $mysqli_default_pw                  = ''
   $mysqli_reconnect                   = 'Off'
+
   $pdo_mysql_cache_size               = 2000
   $pdo_mysql_default_socket           = ''
+
+  $module_ensure                      = 'present'
+  $module_package_prefix              = ''
+  $module_extra_ensure                = 'present'
+  $module_content                     = ''
+  $module_provider                    = ''
+
+  #---
+
+  case $::operatingsystem {
+    debian, ubuntu: {
+      $cli_package                = 'php5-cli'
+      $extra_packages             = []
+      $pear_package               = 'php-pear'
+      $gd_package                 = 'php5-gd'
+      $curl_package               = 'php5-curl'
+      $xmlrpc_package             = 'php5-xmlrpc'
+
+      $etc_dir                    = '/etc/php5'
+      $conf_dir                   = "${etc_dir}/conf.d"
+      $cli_dir                    = "${etc_dir}/cli"
+      $cli_ini                    = "${cli_dir}/php.ini"
+      $cli_ini_template           = 'php/php.ini.erb'
+
+      $doc_root                   = ''
+      $user_dir                   = ''
+      $upload_tmp_dir             = ''
+
+      $session_save_path          = '/tmp'
+      $session_entropy_file       = '/dev/urandom'
+
+      $soap_wsdl_cache_dir        = '/tmp'
+
+      $apache_package             = 'libapache2-mod-php5'
+      $apache_config_dir          = "${etc_dir}/apache2"
+      $apache_ini                 = "${apache_config_dir}/php.ini"
+
+      $apc_packages               = [ 'libpcre3-dev' ]
+      $apc_template               = 'php/apc.ini.erb'
+      $apc_mmap_file_mask         = '/tmp/apc.XXXXXX'
+
+      $mysql_package              = 'php5-mysql'
+      $mysql_module_configs       = [ 'mysql', 'mysqli', 'pdo', 'pdo_mysql' ]
+      $mysql_template             = 'php/mysql.ini.erb'
+
+      $xdebug_zend_extension      = '/usr/lib/php5/20090626/xdebug.so'
+      $xdebug_template            = 'php/xdebug.ini.erb'
+      $xdebug_profiler_output_dir = '/var/log/profiles'
+      $xdebug_trace_output_dir    = '/var/log/traces'
+    }
+    default: {
+      fail("The php module is not currently supported on ${::operatingsystem}")
+    }
+  }
 }
