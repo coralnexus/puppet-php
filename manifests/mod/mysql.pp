@@ -48,7 +48,7 @@ class php::mod::mysql (
   }
 
   php::module { $module_configs:
-    ensure   => undef,
+    ensure   => false,
     conf_dir => $conf_dir,
     require  => Php::Module[$package],
   }

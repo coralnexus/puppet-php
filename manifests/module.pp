@@ -17,7 +17,7 @@ define php::module (
   #-----------------------------------------------------------------------------
   # Installation
 
-  if $ensure != undef {
+  if $ensure != false {
     $real_require = $require ? {
       undef   => File['php-conf-dir'],
       default => flatten([ File['php-conf-dir'], $require ]),

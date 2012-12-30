@@ -3,7 +3,7 @@ class php::params::mysql inherits php::params {
 
   $package                           = module_param('mysql_package')
   $ensure                            = module_param('mysql_ensure')
-  $module_configs                    = module_param('mysql_module_configs')
+  $module_configs                    = module_array('mysql_module_configs')
   $template                          = module_param('mysql_template')
 
   #---
