@@ -18,7 +18,7 @@ class php::mod::xdebug (
   $xdebug_profiler_append         = $php::params::xdebug::xdebug_profiler_append,
   $xdebug_auto_trace              = $php::params::xdebug::xdebug_auto_trace,
   $xdebug_trace_output_dir        = $php::params::xdebug::xdebug_trace_output_dir,
-  $xdebug_trace_output_name       = $php::params::xdebug::xdebug_trace_output_name,
+  $xdebug_trace_output_name       = $php::params::xdebug::xdebug_trace_output_name
 
 ) inherits php::params::xdebug {
 

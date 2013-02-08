@@ -1,6 +1,8 @@
 
 define php::module (
 
+  $package        = $name,
+  $config_name    = $name,
   $ensure         = $php::params::module_ensure,
   $package_prefix = $php::params::module_package_prefix,
   $extra_packages = [],
@@ -29,23 +31,23 @@ define php::module (
     }
 
     if $provider == 'pear' or $provider == 'pecl' {
-      package { "php-${name}":
-        name     => "${package_prefix}${name}",
+      package { "php-${package}":
+        name     => "${package_prefix}${package}",
         provider => $provider,
       }
     }
     else {
-      package { "php-${name}": name => "${package_prefix}${name}" }
+      package { "php-${package}": name => "${package_prefix}${package}" }
     }
   }
 
   #---
 
   if ! empty($extra_packages) {
-    package { "php-extra-${name}":
+    package { "php-extra-${package}":
       name    => $extra_packages,
       ensure  => $extra_ensure,
-      require => Package["php-${name}"],
+      require => Package["php-${package}"],
     }
   }
 
@@ -53,10 +55,10 @@ define php::module (
   # Configuration
 
   if $content != undef {
-    php::conf { $name:
+    php::conf { $config_name:
       conf_dir => $conf_dir,
       content  => $content ? {
-        ''       => "extension=${package_prefix}${name}.so",
+        ''       => "extension=${package_prefix}${config_name}.so",
         default  => $content,
       },
     }
