@@ -82,30 +82,42 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   # We are scraping here.  Whoohoo!
   #
   def self.peclsplit(desc)
-    case desc
+    case desc    
+    when /^No entry for terminal/
+      return nil
     
-    when /^No entry for terminal/: return nil
-    when /^using dumb terminal/: return nil
-    when /^.*Installed.*/: return nil
-    when /^=/: return nil
-    when /^.*Package.*/: return nil
-    when /^\s*$/: return nil
-    when /^\(no packages installed\)$/: return nil
+    when /^using dumb terminal/
+      return nil
+    
+    when /^.*Installed.*/
+      return nil
+    
+    when /^=/
+      return nil
+    
+    when /^.*Package.*/
+      return nil
+    
+    when /^\s*$/
+      return nil
+    
+    when /^\(no packages installed\)$/
+      return nil
     
     when /^(\S+)\s+([.\da-zA-Z]+)\s+\S+\n/
-      name = $1
+      name    = $1
       version = $2
       
       Puppet.debug "Pecl match %s  %s" % [ name, version ]
       
       return {
-        :name => name,
+        :name   => name,
         :ensure => version
       }
     
     else
       Puppet.warning "Could not match pecl %s" % desc
-      nil
+      return nil
     end
   end
 

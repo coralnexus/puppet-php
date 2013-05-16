@@ -61,23 +61,37 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
 
   def self.pearsplit(desc)
     case desc
-    when /^No entry for terminal/: return nil
-    when /^using dumb terminal/: return nil
-    when /^INSTALLED/: return nil
-    when /^=/: return nil
-    when /^PACKAGE/: return nil
-    when /^$/: return nil
-    when /^\(no packages installed\)$/: return nil
+    when /^No entry for terminal/
+      return nil
+      
+    when /^using dumb terminal/
+      return nil
+      
+    when /^INSTALLED/
+      return nil
+      
+    when /^=/
+      return nil
+      
+    when /^PACKAGE/
+      return nil
+      
+    when /^$/
+      return nil
+      
+    when /^\(no packages installed\)$/
+      return nil
+      
     when /^(\S+)\s+([.\da-zA-Z]+)\s+\S+\n/
-      name = $1
+      name    = $1
       version = $2
       return {
-        :name => name,
+        :name   => name,
         :ensure => version
       }
     else
       Puppet.warning "Could not match %s" % desc
-      nil
+      return nil
     end
   end
 
@@ -97,20 +111,28 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
         nil
       end
     end.reject { |p| p.nil? }
-    list
+    return list
   end
 
   def self.channelsplit(desc)
     case desc
-    when /^Registered/: return nil
-    when /^=/: return nil
-    when /^Channel/: return nil
-    when /^\s+/: return nil
+    when /^Registered/
+      return nil
+      
+    when /^=/
+      return nil
+      
+    when /^Channel/
+      return nil
+      
+    when /^\s+/
+      return nil
+      
     when /^(\S+)/
       $1
     else
       Puppet.warning "Could not match pear %s" % desc
-      nil
+      return nil
     end
   end
 
