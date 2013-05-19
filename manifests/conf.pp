@@ -3,8 +3,7 @@ define php::conf (
 
   $ensure   = 'present',
   $content  = '',
-  $conf_dir = $php::params::conf_dir,
-  $require  = undef,
+  $conf_dir = $php::params::conf_dir
 
 ) {
 
@@ -17,10 +16,7 @@ define php::conf (
       path    => "${conf_dir}/${name}.ini",
       ensure  => $ensure,
       content => $content,
-      require => $require ? {
-        undef   => File['php-conf-dir'],
-        default => flatten([ File['php-conf-dir'], $require ]),
-      },
+      require => File['php-conf-dir']
     }
   }
 }

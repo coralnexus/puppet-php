@@ -9,8 +9,7 @@ define php::module (
   $extra_ensure   = $php::params::module_extra_ensure,
   $content        = $php::params::module_content,
   $provider       = $php::params::module_provider,
-  $conf_dir       = $php::params::conf_dir,
-  $require        = undef,
+  $conf_dir       = $php::params::conf_dir
 
 ) {
 
@@ -19,15 +18,10 @@ define php::module (
   #-----------------------------------------------------------------------------
   # Installation
 
-  if $ensure != false {
-    $real_require = $require ? {
-      undef   => File['php-conf-dir'],
-      default => flatten([ File['php-conf-dir'], $require ]),
-    }
-
+  if $ensure {
     Package {
       ensure  => $ensure,
-      require => $real_require,
+      require => File['php-conf-dir'],
     }
 
     if $provider == 'pear' or $provider == 'pecl' {
