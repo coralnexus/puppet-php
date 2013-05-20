@@ -9,7 +9,6 @@
 #
 # Kudos to Martha Greenberg for posting!
 #
-
 require 'puppet/provider/package'
 
 #
@@ -18,15 +17,15 @@ require 'puppet/provider/package'
 Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package do
 
   #-----------------------------------------------------------------------------
-  # Some configuration
+  # Properties
   #  
-  desc "PHP PECL support. By default uses the installed channels, but you
-        can specify the path to a PECL package via ``source``."
+  desc 'PHP PECL support. By default uses the installed channels, but you
+        can specify the path to a PECL package via ``source``.'
   
   has_feature :versionable
   has_feature :upgradeable
   
-  commands :peclcmd => "pecl"
+  commands :peclcmd => 'pecl'
   
   #-----------------------------------------------------------------------------
   # Capture all of the PECL extensions from a given string.
@@ -37,10 +36,10 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   # matched against that one and only the matching ones returned.
   #
   def self.pecllist(hash)
-    command = [command(:peclcmd), "list"]
+    command = [command(:peclcmd), 'list']
 
     begin
-      list = execute(command).collect do |set|
+      list = execute(command).split(/\n/).collect do |set|
         if hash[:justme]
           if  set =~ /^hash[:justme]/
             if peclhash = peclsplit(set)
@@ -62,8 +61,8 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
         end
       end.reject { |p| p.nil? }
       
-      rescue Puppet::ExecutionFailure => detail
-      raise Puppet::Error, "Could not list pecl: %s" % detail
+    rescue Puppet::ExecutionFailure => detail
+      raise Puppet::Error, 'Could not list pecl: %s' % detail
     end
 
     if hash[:justme]
@@ -79,16 +78,8 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   # Unfortunately, this is an ugly work around for a linux command that does not
   # seem to have a more programmatic way of rendering the data.
   #
-  # We are scraping here.  Whoohoo!
-  #
   def self.peclsplit(desc)
     case desc    
-    when /^No entry for terminal/
-      return nil
-    
-    when /^using dumb terminal/
-      return nil
-    
     when /^.*Installed.*/
       return nil
     
@@ -104,11 +95,11 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
     when /^\(no packages installed\)$/
       return nil
     
-    when /^(\S+)\s+([.\da-zA-Z]+)\s+\S+\n/
+    when /^(\S+)\s+([.\da-zA-Z]+)\s+\S+/
       name    = $1
       version = $2
       
-      Puppet.debug "Pecl match %s  %s" % [ name, version ]
+      Puppet.debug 'Pecl match %s  %s' % [ name, version ]
       
       return {
         :name   => name,
@@ -116,7 +107,7 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
       }
     
     else
-      Puppet.warning "Could not match pecl %s" % desc
+      Puppet.warning 'Could not match pecl %s' % desc
       return nil
     end
   end
@@ -138,7 +129,7 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   # Install or upgrade PECL packages.
   #
   def install(useversion = true)
-    command = ["upgrade"]
+    command = ['upgrade']
 
     if source = @resource[:source]
       command << source
@@ -146,7 +137,7 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
       if (! @resource.should(:ensure).is_a? Symbol) and useversion
         command << "#{@resource[:name]}-#{@resource.should(:ensure)}"
       else
-        command << "#{@resource[:name]}"
+        command << @resource[:name]
       end
     end
 
@@ -156,12 +147,10 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   #-----------------------------------------------------------------------------
   # Get the latest version available for a PECL package.
   #
-  # And more scraping...
-  #
   def latest
     version = ''
-    command = [command(:peclcmd), "remote-info", "#{@resource[:name]}"]
-      list = execute(command).collect do |set|
+    command = [command(:peclcmd), 'remote-info', @resource[:name]]
+      list = execute(command).split(/\n/).collect do |set|
       if set =~ /^Latest/
         version = set.split[1]
       end
@@ -180,7 +169,7 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   # Uninstall a specific PECL package.
   #
   def uninstall
-    output = peclcmd "uninstall", "#{@resource[:name]}"
+    output = peclcmd 'uninstall', @resource[:name]
     if output =~ /^uninstall ok/
     else
       raise Puppet::Error, output

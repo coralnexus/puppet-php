@@ -1,26 +1,39 @@
-# Puppet PHP PEAR Package support
-# Taken from https://raw.github.com/gist/305778/13f46dea6eba07e38778d7159644b4210ebe7bbe/pear.rb
-
+#
+# Pear Puppet package provider
+#
+#-------------------------------------------------------------------------------
+#
 require 'puppet/provider/package'
 
-# PHP PEAR support.
+#
+# Package provider definition
+#
 Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package do
-  desc "PHP PEAR support. By default uses the installed channels, but you
-        can specify the path to a pear package via ``source``."
+
+  #-----------------------------------------------------------------------------
+  # Properties
+  #
+  desc 'PHP PEAR support. By default uses the installed channels, but you
+        can specify the path to a pear package via ``source``.'
 
   has_feature :versionable
   has_feature :upgradeable
 
-  commands :pearcmd => "pear"
-
+  commands :pearcmd => 'pear'
+  
+  #-----------------------------------------------------------------------------
+  # Capture all of the Pear extensions from a given string.
+  #
+  # Returned by [ pear list ]
+  #
+  # If hash is indeed a hash and :justme is passed then all packages are
+  # matched against that one and only the matching ones returned.
+  #
   def self.pearlist(hash)
-    # Work around PEAR's bold/italic output.
-    old_term = ENV['TERM']
-    ENV['TERM'] = 'puppet'
-    command = [command(:pearcmd), "list", "-a"]
+    command = [command(:pearcmd), 'list', '-a']
 
     begin
-      list = execute(command).collect do |set|
+      list = execute(command).split(/\n/).collect do |set|
         if hash[:justme]
           if  set =~ /^hash[:justme]/
             if pearhash = pearsplit(set)
@@ -42,15 +55,10 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
         end
 
       end.reject { |p| p.nil? }
+      
     rescue Puppet::ExecutionFailure => detail
-      # Restore the old TERM value before bailing out.
-      ENV['TERM'] = old_term
-
-      raise Puppet::Error, "Could not list pears: %s" % detail
+      raise Puppet::Error, 'Could not list pears: %s' % detail
     end
-
-    # Restore the old TERM value.
-    ENV['TERM'] = old_term
 
     if hash[:justme]
       return list.shift
@@ -59,14 +67,14 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
     end
   end
 
+  #-----------------------------------------------------------------------------
+  # Extract meta data from a text string about Pear packages.
+  #
+  # Unfortunately, this is an ugly work around for a linux command that does not
+  # seem to have a more programmatic way of rendering the data.
+  #
   def self.pearsplit(desc)
     case desc
-    when /^No entry for terminal/
-      return nil
-      
-    when /^using dumb terminal/
-      return nil
-      
     when /^INSTALLED/
       return nil
       
@@ -82,29 +90,42 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
     when /^\(no packages installed\)$/
       return nil
       
-    when /^(\S+)\s+([.\da-zA-Z]+)\s+\S+\n/
+    when /^(\S+)\s+([.\da-zA-Z]+)\s+\S+/
       name    = $1
       version = $2
+      
+      Puppet.debug 'Pecl match %s  %s' % [ name, version ]
+      
       return {
         :name   => name,
         :ensure => version
       }
+      
     else
-      Puppet.warning "Could not match %s" % desc
+      Puppet.warning 'Could not match %s' % desc
       return nil
     end
   end
 
+  #-----------------------------------------------------------------------------
+  # Return all local Pear packages.
+  #
+  # Right now the :local option is not implemented but it would basically do 
+  # what it's doing now anyway.  I guess this was for future expansion.
+  #
   def self.instances
     which('pear') or return []
     pearlist(:local => true).collect do |hash|
       new(hash)
     end
   end
-
+  
+  #-----------------------------------------------------------------------------
+  # Return all current Pear channels.
+  #
   def self.channellist
-    command = [command(:pearcmd), "list-channels"]
-    list = execute(command).collect do |set|
+    command = [command(:pearcmd), 'list-channels']
+    list = execute(command).split(/\n/).collect do |set|
       if channelhash = channelsplit(set)
         channelhash
       else
@@ -114,6 +135,12 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
     return list
   end
 
+  #-----------------------------------------------------------------------------
+  # Extract meta data from a text string about Pear channels.
+  #
+  # Unfortunately, this is an ugly work around for a linux command that does not
+  # seem to have a more programmatic way of rendering the data.
+  #
   def self.channelsplit(desc)
     case desc
     when /^Registered/
@@ -129,19 +156,23 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
       return nil
       
     when /^(\S+)/
-      $1
+      $1.strip
     else
-      Puppet.warning "Could not match pear %s" % desc
+      Puppet.warning 'Could not match Pear channel %s' % desc
       return nil
     end
   end
 
+  #-----------------------------------------------------------------------------
+  # Install or upgrade Pear packages.
+  #
   def install(useversion = true)
 
-    command = ["upgrade", "--force"]
+    command = ['upgrade', '--force']
 
     # Channel provided
     if source = @resource[:source]
+      #dbg(source, 'install source')
 
       match = source.match(/^([^\/]+)(?:\/(.*))?$/)
 
@@ -149,10 +180,14 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
         channel = match[1]
         package = match[2]
       end
+      
+      #dbg(channel, 'install channel')
+      #dbg(package, 'install package')
 
       # Check if channel is available, if not, discover
       if match and !self.class.channellist().include?(channel)
-        execute([command(:pearcmd), "channel-discover", channel])
+        #dbg('discovering channels')
+        #dbg(execute([command(:pearcmd), 'channel-discover', channel]), 'output')
       end
 
       # Check if package is named in source, if not, use hash and append
@@ -171,33 +206,48 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
       end
     end
 
+    #dbg(command, 'install command')
     pearcmd(*command)
   end
 
+  #-----------------------------------------------------------------------------
+  # Get the latest version available for a Pear package.
+  #
   def latest
     # This always gets the latest version available.
     version = ''
-    command = [command(:pearcmd), "remote-info", @resource[:name]]
-      list = execute(command).collect do |set|
+    command = [command(:pearcmd), 'remote-info', @resource[:name]]
+    list    = execute(command).split(/\n/).collect do |set|
       if set =~ /^Latest/
         version = set.split[1]
       end
     end
+    dbg(command, 'latest command')
+    dbg(version, 'latest version')
     return version
   end
 
+  #-----------------------------------------------------------------------------
+  # Return information for a specific Pear package.
+  #
   def query
     self.class.pearlist(:justme => @resource[:name])
   end
 
+  #-----------------------------------------------------------------------------
+  # Uninstall a specific Pear package.
+  #
   def uninstall
-    output = pearcmd "uninstall", @resource[:name]
+    output = pearcmd 'uninstall', @resource[:name]
     if output =~ /^uninstall ok/
     else
       raise Puppet::Error, output
     end
   end
 
+  #-----------------------------------------------------------------------------
+  # Update a Pear package.
+  #
   def update
     self.install(false)
   end
