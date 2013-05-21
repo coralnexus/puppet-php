@@ -143,13 +143,13 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
   #
   def self.channelsplit(desc)
     case desc
-    when /^Registered/
+    when /^Registered/i
       return nil
       
     when /^=/
       return nil
       
-    when /^Channel/
+    when /^Channel/i
       return nil
       
     when /^\s+/
@@ -187,7 +187,7 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
       # Check if channel is available, if not, discover
       if match and !self.class.channellist().include?(channel)
         #dbg('discovering channels')
-        #dbg(execute([command(:pearcmd), 'channel-discover', channel]), 'output')
+        execute([command(:pearcmd), 'channel-discover', channel])
       end
 
       # Check if package is named in source, if not, use hash and append
@@ -222,8 +222,8 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
         version = set.split[1]
       end
     end
-    dbg(command, 'latest command')
-    dbg(version, 'latest version')
+    #dbg(command, 'latest command')
+    #dbg(version, 'latest version')
     return version
   end
 

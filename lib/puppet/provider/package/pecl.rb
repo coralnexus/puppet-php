@@ -80,19 +80,19 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   #
   def self.peclsplit(desc)
     case desc    
-    when /^.*Installed.*/
+    when /^.*Installed.*/i
       return nil
     
     when /^=/
       return nil
     
-    when /^.*Package.*/
+    when /^.*Package.*/i
       return nil
     
     when /^\s*$/
       return nil
     
-    when /^\(no packages installed\)$/
+    when /^\(no packages installed\)$/i
       return nil
     
     when /^(\S+)\s+([.\da-zA-Z]+)\s+\S+/
