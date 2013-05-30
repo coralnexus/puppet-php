@@ -4,82 +4,82 @@ extension = apc.so
 ; Options for the APC module version >= 3.1.3
 
 ; This can be set to 0 to disable APC. 
-apc.enabled = <%= apc_enabled %>
+apc.enabled = <%= @apc_enabled %>
 
 ; The number of shared memory segments to allocate for the compiler cache. 
-apc.shm_segments = <%= apc_shm_segments %>
+apc.shm_segments = <%= @apc_shm_segments %>
 
 ; The size of each shared memory segment in MB.
-apc.shm_size = <%= apc_shm_size %>
+apc.shm_size = <%= @apc_shm_size %>
 
 ; A "hint" about the number of distinct source files that will be included or 
 ; requested on your web server. Set to zero or omit if you're not sure;
-apc.num_files_hint = <%= apc_num_files_hint %>
+apc.num_files_hint = <%= @apc_num_files_hint %>
 
 ; Just like num_files_hint, a "hint" about the number of distinct user cache
 ; variables to store.  Set to zero or omit if you're not sure;
-apc.user_entries_hint = <%= apc_user_entries_hint %>
+apc.user_entries_hint = <%= @apc_user_entries_hint %>
 
 ; The number of seconds a cache entry is allowed to idle in a slot in case this
 ; cache entry slot is needed by another entry.
-apc.ttl = <%= apc_ttl %>
+apc.ttl = <%= @apc_ttl %>
 
 ; use the SAPI request start time for TTL
-apc.use_request_time = <%= apc_use_request_time %>
+apc.use_request_time = <%= @apc_use_request_time %>
 
 ; The number of seconds a user cache entry is allowed to idle in a slot in case
 ; this cache entry slot is needed by another entry.
-apc.user_ttl = <%= apc_user_ttl %>
+apc.user_ttl = <%= @apc_user_ttl %>
 
 ; The number of seconds that a cache entry may remain on the garbage-collection list. 
-apc.gc_ttl = <%= apc_gc_ttl %>
+apc.gc_ttl = <%= @apc_gc_ttl %>
 
 ; On by default, but can be set to off and used in conjunction with positive
 ; apc.filters so that files are only cached if matched by a positive filter.
-apc.cache_by_default = <%= apc_cache_by_default %>
+apc.cache_by_default = <%= @apc_cache_by_default %>
 
 ; A comma-separated list of POSIX extended regular expressions.
-apc.filters = <%= apc_filters %>
+apc.filters = <%= @apc_filters %>
 
 ; The mktemp-style file_mask to pass to the mmap module 
-apc.mmap_file_mask = <%= apc_mmap_file_mask %>
+apc.mmap_file_mask = <%= @apc_mmap_file_mask %>
 
 ; This file_update_protection setting puts a delay on caching brand new files.
-apc.file_update_protection = <%= apc_file_update_protection %>
+apc.file_update_protection = <%= @apc_file_update_protection %>
 
 ; Setting this enables APC for the CLI version of PHP (Mostly for testing and debugging).
-apc.enable_cli = <%= apc_enable_cli %>
+apc.enable_cli = <%= @apc_enable_cli %>
 
 ; Prevents large files from being cached
 ; iVillage note: This is currently fine - the only file bigger than 1M currently is a .test file.
-apc.max_file_size = <%= apc_max_file_size %>
+apc.max_file_size = <%= @apc_max_file_size %>
 
 ; Whether to stat the main script file and the fullpath includes.
-apc.stat = <%= apc_stat %>
+apc.stat = <%= @apc_stat %>
 
 ; Vertification with ctime will avoid problems caused by programs such as svn or rsync by making 
 ; sure inodes havn't changed since the last stat. APC will normally only check mtime.
-apc.stat_ctime = <%= apc_stat_ctime %>
+apc.stat_ctime = <%= @apc_stat_ctime %>
 
 ; Whether to canonicalize paths in stat=0 mode or fall back to stat behaviour
-apc.canonicalize = <%= apc_canonicalize %>
+apc.canonicalize = <%= @apc_canonicalize %>
 
 ; With write_lock enabled, only one process at a time will try to compile an 
 ; uncached script while the other processes will run uncached
-apc.write_lock = <%= apc_write_lock %>
+apc.write_lock = <%= @apc_write_lock %>
 
 ; Logs any scripts that were automatically excluded from being cached due to early/late binding issues.
-apc.report_autofilter = <%= apc_report_autofilter %>
+apc.report_autofilter = <%= @apc_report_autofilter %>
 
 ; RFC1867 File Upload Progress hook handler
-apc.rfc1867 = <%= apc_rfc1867 %>
-apc.rfc1867_prefix = <%= apc_rfc1867_prefix %>
-apc.rfc1867_name = <%= apc_rfc1867_name %>
-apc.rfc1867_freq = <%= apc_rfc1867_freq %>
-apc.rfc1867_ttl = <%= apc_rfc1867_ttl %>
+apc.rfc1867 = <%= @apc_rfc1867 %>
+apc.rfc1867_prefix = <%= @apc_rfc1867_prefix %>
+apc.rfc1867_name = <%= @apc_rfc1867_name %>
+apc.rfc1867_freq = <%= @apc_rfc1867_freq %>
+apc.rfc1867_ttl = <%= @apc_rfc1867_ttl %>
 
 ; Optimize include_once and require_once calls and avoid the expensive system calls used.
-apc.include_once_override = <%= apc_include_once_override %>
-apc.lazy_classes = <%= apc_lazy_classes %>
-apc.lazy_functions = <%= apc_lazy_functions %>
+apc.include_once_override = <%= @apc_include_once_override %>
+apc.lazy_classes = <%= @apc_lazy_classes %>
+apc.lazy_functions = <%= @apc_lazy_functions %>
 
