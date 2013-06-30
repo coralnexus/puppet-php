@@ -24,10 +24,25 @@ class php::mod::xdebug (
 
   #-----------------------------------------------------------------------------
 
+  file { 'xdebug-profiles':
+    path   => $xdebug_profiler_output_dir,
+    ensure => directory,
+    mode   => 0777, # Don't know which user php might be running as?
+  }
+  
+  file { 'xdebug-traces':
+    path   => $xdebug_trace_output_dir,
+    ensure => directory,
+    mode   => 0777, # Don't know which user php might be running as?
+  }
+  
+  #---
+
   php::module { 'xdebug':
     ensure   => $ensure,
     provider => 'pecl',
     conf_dir => $conf_dir,
     content  => template($template),
+    require  => [ File['xdebug-profiles'], File['xdebug-traces'] ]
   }
 }
