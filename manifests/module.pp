@@ -9,7 +9,8 @@ define php::module (
   $extra_ensure   = $php::params::module_extra_ensure,
   $content        = $php::params::module_content,
   $provider       = $php::params::module_provider,
-  $conf_dir       = $php::params::conf_dir
+  $conf_dir       = $php::params::conf_dir,
+  $service        = $php::params::apache::service
 
 ) {
 
@@ -55,6 +56,7 @@ define php::module (
         ''       => "extension=${package_prefix}${config_name}.so",
         default  => $content,
       },
+      service => $service
     }
   }
 }

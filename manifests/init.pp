@@ -155,6 +155,7 @@ class php (
   $soap_wsdl_cache_dir                = $php::params::soap_wsdl_cache_dir,
   $soap_wsdl_cache_ttl                = $php::params::soap_wsdl_cache_ttl,
   $soap_wsdl_cache_limit              = $php::params::soap_wsdl_cache_limit,
+  $service                            = $php::params::apache::service
 
 ) inherits php::params {
 
@@ -193,7 +194,8 @@ class php (
 
   if $module_packages {
     php::module { $module_packages:
-      ensure => $module_ensure,
+      ensure  => $module_ensure,
+      service => $service
     }
   }
 
@@ -201,6 +203,7 @@ class php (
     php::module { $pear_module_packages:
       ensure   => $module_ensure,
       provider => 'pear',
+      service  => $service
     }
   }
 
@@ -208,6 +211,7 @@ class php (
     php::module { $pecl_module_packages:
       ensure   => $module_ensure,
       provider => 'pecl',
+      service  => $service
     }
   }
 

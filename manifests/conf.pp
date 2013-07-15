@@ -3,11 +3,19 @@ define php::conf (
 
   $ensure   = 'present',
   $content  = '',
-  $conf_dir = $php::params::conf_dir
+  $conf_dir = $php::params::conf_dir,
+  $service  = $php::params::apache::service
 
 ) {
 
-  include php
+  if defined(Service[$service]) {
+    Package {
+      notify => Service[$service],
+    }
+    File {
+      notify => Service[$service],
+    }
+  }
 
   #-----------------------------------------------------------------------------
 
