@@ -155,7 +155,7 @@ class php (
   $soap_wsdl_cache_dir                = $php::params::soap_wsdl_cache_dir,
   $soap_wsdl_cache_ttl                = $php::params::soap_wsdl_cache_ttl,
   $soap_wsdl_cache_limit              = $php::params::soap_wsdl_cache_limit,
-  $service                            = $php::params::apache::service
+  $service                            = $php::params::service
 
 ) inherits php::params {
 

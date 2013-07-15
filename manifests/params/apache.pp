@@ -3,7 +3,7 @@ class php::params::apache inherits php::params {
 
   $package                            = module_param('apache_package')
   $ensure                             = module_param('apache_ensure')
-  $service                            = module_param('apache_service')
+  $service                            = $php::params::service
 
   #---
 

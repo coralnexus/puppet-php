@@ -154,7 +154,7 @@ class php::apache (
 
   #-----------------------------------------------------------------------------
 
-  if defined(Service[$service]) {
+  if $service and defined(Service[$service]) {
     Package {
       notify => Service[$service],
     }

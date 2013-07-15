@@ -10,12 +10,19 @@ define php::module (
   $content        = $php::params::module_content,
   $provider       = $php::params::module_provider,
   $conf_dir       = $php::params::conf_dir,
-  $service        = $php::params::apache::service
+  $service        = $php::params::service
 
 ) {
 
-  include php
-
+  if $service and defined(Service[$service]) {
+    Package {
+      notify => Service[$service],
+    }
+    File {
+      notify => Service[$service],
+    }
+  }
+  
   #-----------------------------------------------------------------------------
   # Installation
 
