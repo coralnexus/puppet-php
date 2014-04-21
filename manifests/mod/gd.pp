@@ -1,4 +1,3 @@
-
 class php::mod::gd (
 
   $package  = $php::params::gd_package,
@@ -13,5 +12,6 @@ class php::mod::gd (
     config_name  => 'gd',
     ensure   => $ensure,
     conf_dir => $conf_dir,
+    content  => ''
   }
 }
