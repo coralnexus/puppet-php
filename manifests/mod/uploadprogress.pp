@@ -1,4 +1,3 @@
-
 class php::mod::uploadprogress (
 
   $ensure   = $php::params::module_ensure,
@@ -12,5 +11,6 @@ class php::mod::uploadprogress (
     ensure   => $ensure,
     provider => 'pecl',
     conf_dir => $conf_dir,
+    content  => ''
   }
 }
