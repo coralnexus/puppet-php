@@ -1,4 +1,3 @@
-
 class php::mod::curl (
 
   $package  = $php::params::curl_package,
@@ -13,5 +12,6 @@ class php::mod::curl (
     config_name  => 'curl',
     ensure       => $ensure,
     conf_dir     => $conf_dir,
+    content      => ''
   }
 }
