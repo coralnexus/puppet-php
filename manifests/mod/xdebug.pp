@@ -26,16 +26,14 @@ class php::mod::xdebug (
 
   file { 'xdebug-profiles':
     path   => $xdebug_profiler_output_dir,
-    ensure => directory,
-    mode   => 0777, # Don't know which user php might be running as?
+    ensure => directory
   }
-  
+
   file { 'xdebug-traces':
     path   => $xdebug_trace_output_dir,
-    ensure => directory,
-    mode   => 0777, # Don't know which user php might be running as?
+    ensure => directory
   }
-  
+
   #---
 
   php::module { 'xdebug':
