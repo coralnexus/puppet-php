@@ -243,7 +243,7 @@ class php::default {
   case $::operatingsystem {
     debian, ubuntu: {
       $cli_package                = 'php5-cli'
-      $extra_packages             = []
+      $extra_packages             = [ 'php5-dev' ]
       $pear_package               = 'php-pear'
       $gd_package                 = 'php5-gd'
       $curl_package               = 'php5-curl'

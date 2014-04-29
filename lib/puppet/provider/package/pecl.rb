@@ -3,12 +3,6 @@
 #
 #-------------------------------------------------------------------------------
 #
-# This file is derived from (not the same as) the pecl.pp located here:
-#
-# http://www.mit.edu/~marthag/puppet/pecl.rb
-#
-# Kudos to Martha Greenberg for posting!
-#
 require 'puppet/provider/package'
 
 #
@@ -32,19 +26,16 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   #
   # Returned by [ pecl list ]
   #
-  # If hash is indeed a hash and :justme is passed then all packages are
-  # matched against that one and only the matching ones returned.
-  #
-  def self.pecllist(hash)
+  def self.pecllist(options)
     command = [command(:peclcmd), 'list']
-
+    
     begin
-      list = execute(command).split(/\n/).collect do |set|
-        if hash[:justme]
-          if  set =~ /^hash[:justme]/
-            if peclhash = peclsplit(set)
-              peclhash[:provider] = :pecl
-              peclhash
+      list = execute(command).split(/\n/).collect do |desc|
+        if options[:justme]
+          if desc =~ /^#{options[:justme]}/
+            if pecloptions = peclsplit(desc, options)
+              pecloptions[:provider] = :pecl
+              pecloptions
             else
               nil
             end
@@ -52,9 +43,9 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
             nil
           end
         else
-          if peclhash = peclsplit(set)
-            peclhash[:provider] = :pecl
-            peclhash
+          if pecloptions = peclsplit(desc, options)
+            pecloptions[:provider] = :pecl
+            pecloptions
           else
             nil
           end
@@ -62,10 +53,10 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
       end.reject { |p| p.nil? }
       
     rescue Puppet::ExecutionFailure => detail
-      raise Puppet::Error, 'Could not list pecl: %s' % detail
+      raise Puppet::Error, 'Could not list PECL names: %s' % detail
     end
-
-    if hash[:justme]
+    
+    if options[:justme]
       return list.shift
     else
       return list
@@ -75,10 +66,7 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   #-----------------------------------------------------------------------------
   # Extract meta data from a text string about PECL packages.
   #
-  # Unfortunately, this is an ugly work around for a linux command that does not
-  # seem to have a more programmatic way of rendering the data.
-  #
-  def self.peclsplit(desc)
+  def self.peclsplit(desc, options = {})
     case desc    
     when /^.*Installed.*/i
       return nil
@@ -115,13 +103,10 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   #-----------------------------------------------------------------------------
   # Return all local PECL packages.
   #
-  # Right now the :local option is not implemented but it would basically do 
-  # what it's doing now anyway.  I guess this was for future expansion.
-  #
   def self.instances
     which('pecl') or return []
-    pecllist(:local => true).collect do |hash|
-      new(hash)
+    pecllist(:local => true).collect do |options|
+      new(options)
     end
   end
 
@@ -140,7 +125,7 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
         command << @resource[:name]
       end
     end
-
+    
     peclcmd(*command)
   end
 
@@ -150,9 +135,9 @@ Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package 
   def latest
     version = ''
     command = [command(:peclcmd), 'remote-info', @resource[:name]]
-      list = execute(command).split(/\n/).collect do |set|
-      if set =~ /^Latest/
-        version = set.split[1]
+    list = execute(command).split(/\n/).collect do |desc|
+      if desc =~ /^Latest/
+        version = desc.split[1]
       end
     end
     return version

@@ -26,19 +26,16 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
   #
   # Returned by [ pear list ]
   #
-  # If hash is indeed a hash and :justme is passed then all packages are
-  # matched against that one and only the matching ones returned.
-  #
-  def self.pearlist(hash)
+  def self.pearlist(options)
     command = [command(:pearcmd), 'list', '-a']
-
+    
     begin
-      list = execute(command).split(/\n/).collect do |set|
-        if hash[:justme]
-          if  set =~ /^hash[:justme]/
-            if pearhash = pearsplit(set)
-              pearhash[:provider] = :pear
-              pearhash
+      list = execute(command).split(/\n/).collect do |desc|
+        if options[:justme]
+          if desc =~ /^#{options[:justme]}/
+            if pearoptions = pearsplit(desc, options)
+              pearoptions[:provider] = :pear
+              pearoptions
             else
               nil
             end
@@ -46,9 +43,9 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
             nil
           end
         else
-          if pearhash = pearsplit(set)
-            pearhash[:provider] = :pear
-            pearhash
+          if pearoptions = pearsplit(desc, options)
+            pearoptions[:provider] = :pear
+            pearoptions
           else
             nil
           end
@@ -57,10 +54,10 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
       end.reject { |p| p.nil? }
       
     rescue Puppet::ExecutionFailure => detail
-      raise Puppet::Error, 'Could not list pears: %s' % detail
+      raise Puppet::Error, 'Could not list Pear names: %s' % detail
     end
-
-    if hash[:justme]
+    
+    if options[:justme]
       return list.shift
     else
       return list
@@ -70,10 +67,7 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
   #-----------------------------------------------------------------------------
   # Extract meta data from a text string about Pear packages.
   #
-  # Unfortunately, this is an ugly work around for a linux command that does not
-  # seem to have a more programmatic way of rendering the data.
-  #
-  def self.pearsplit(desc)
+  def self.pearsplit(desc, options = {})
     case desc
     when /^INSTALLED/
       return nil
@@ -110,13 +104,10 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
   #-----------------------------------------------------------------------------
   # Return all local Pear packages.
   #
-  # Right now the :local option is not implemented but it would basically do 
-  # what it's doing now anyway.  I guess this was for future expansion.
-  #
-  def self.instances
+  def self.instances(justme = false)
     which('pear') or return []
-    pearlist(:local => true).collect do |hash|
-      new(hash)
+    pearlist(:local => true).collect do |options|
+      new(options)
     end
   end
   
@@ -125,9 +116,9 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
   #
   def self.channellist
     command = [command(:pearcmd), 'list-channels']
-    list = execute(command).split(/\n/).collect do |set|
-      if channelhash = channelsplit(set)
-        channelhash
+    list = execute(command).split(/\n/).collect do |desc|
+      if channel_options = channelsplit(desc)
+        channel_options
       else
         nil
       end
@@ -137,9 +128,6 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
 
   #-----------------------------------------------------------------------------
   # Extract meta data from a text string about Pear channels.
-  #
-  # Unfortunately, this is an ugly work around for a linux command that does not
-  # seem to have a more programmatic way of rendering the data.
   #
   def self.channelsplit(desc)
     case desc
@@ -156,7 +144,8 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
       return nil
       
     when /^(\S+)/
-      $1.strip
+      return $1.strip
+      
     else
       Puppet.warning 'Could not match Pear channel %s' % desc
       return nil
@@ -172,8 +161,6 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
 
     # Channel provided
     if source = @resource[:source]
-      #dbg(source, 'install source')
-
       match = source.match(/^([^\/]+)(?:\/(.*))?$/)
 
       if match
@@ -181,12 +168,8 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
         package = match[2]
       end
       
-      #dbg(channel, 'install channel')
-      #dbg(package, 'install package')
-
       # Check if channel is available, if not, discover
       if match and !self.class.channellist().include?(channel)
-        #dbg('discovering channels')
         execute([command(:pearcmd), 'channel-discover', channel])
       end
 
@@ -206,7 +189,6 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
       end
     end
 
-    #dbg(command, 'install command')
     pearcmd(*command)
   end
 
@@ -217,13 +199,11 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
     # This always gets the latest version available.
     version = ''
     command = [command(:pearcmd), 'remote-info', @resource[:name]]
-    list    = execute(command).split(/\n/).collect do |set|
-      if set =~ /^Latest/
-        version = set.split[1]
+    list    = execute(command).split(/\n/).collect do |desc|
+      if desc =~ /^Latest/
+        version = desc.split[1]
       end
     end
-    #dbg(command, 'latest command')
-    #dbg(version, 'latest version')
     return version
   end
 
@@ -231,7 +211,7 @@ Puppet::Type.type(:package).provide :pear, :parent => Puppet::Provider::Package 
   # Return information for a specific Pear package.
   #
   def query
-    self.class.pearlist(:justme => @resource[:name])
+    self.class.pearlist(:justme => @resource[:name].split('/').pop)
   end
 
   #-----------------------------------------------------------------------------
