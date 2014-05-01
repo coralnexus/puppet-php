@@ -11,7 +11,6 @@ class php::mod::xmlrpc (
   php::module { $package:
     config_name  => 'xmlrpc',
     ensure       => $ensure,
-    conf_dir     => $conf_dir,
-    content      => ''
+    conf_dir     => $conf_dir
   }
 }

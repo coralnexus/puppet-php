@@ -1,6 +1,6 @@
 
 class php::params inherits php::default {
-  
+
   $service                            = module_param('service', 'apache')
 
   $cli_package                        = module_param('cli_package')
@@ -174,4 +174,6 @@ class php::params inherits php::default {
   $module_extra_ensure                = module_param('module_extra_ensure')
   $module_content                     = module_param('module_content')
   $module_provider                    = module_param('module_provider')
+
+  $module_enable_command              = module_param('module_enable_command')
 }

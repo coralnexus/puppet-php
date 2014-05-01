@@ -235,13 +235,13 @@ class php::default {
   $module_ensure                      = 'present'
   $module_package_prefix              = ''
   $module_extra_ensure                = 'present'
-  $module_content                     = ''
+  $module_content                     = ' '
   $module_provider                    = ''
 
   #---
 
   case $::operatingsystem {
-    debian, ubuntu: {
+    ubuntu: {
       $cli_package                = 'php5-cli'
       $extra_packages             = [ 'php5-dev' ]
       $pear_package               = 'php-pear'
@@ -250,10 +250,12 @@ class php::default {
       $xmlrpc_package             = 'php5-xmlrpc'
 
       $etc_dir                    = '/etc/php5'
-      $conf_dir                   = "${etc_dir}/conf.d"
+      $conf_dir                   = "${etc_dir}/mods-available"
       $cli_dir                    = "${etc_dir}/cli"
       $cli_ini                    = "${cli_dir}/php.ini"
       $cli_ini_template           = 'php/php.ini.erb'
+
+      $module_enable_command      = '/usr/sbin/php5enmod'
 
       $doc_root                   = ''
       $user_dir                   = ''
@@ -276,7 +278,7 @@ class php::default {
       $mysql_module_configs       = [ 'mysql', 'mysqli', 'pdo', 'pdo_mysql' ]
       $mysql_template             = 'php/mysql.ini.erb'
 
-      $xdebug_zend_extension      = '/usr/lib/php5/20090626/xdebug.so'
+      $xdebug_zend_extension      = '/usr/lib/php5/20121212/xdebug.so'
       $xdebug_template            = 'php/xdebug.ini.erb'
       $xdebug_profiler_output_dir = '/var/log/profiles'
       $xdebug_trace_output_dir    = '/var/log/traces'

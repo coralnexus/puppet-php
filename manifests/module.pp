@@ -22,7 +22,7 @@ define php::module (
       notify => Service[$service],
     }
   }
-  
+
   #-----------------------------------------------------------------------------
   # Installation
 
@@ -59,11 +59,22 @@ define php::module (
   if $content != undef {
     php::conf { $config_name:
       conf_dir => $conf_dir,
-      content  => $content ? {
+      content  => strip($content) ? {
         ''       => "extension=${package_prefix}${config_name}.so",
         default  => $content,
       },
-      service => $service
+      service       => $service,
+      update_notify => Exec["php-enable-${config_name}"]
+    }
+  }
+
+  #---
+
+  if $php::params::module_enable_command {
+    exec { "php-enable-${config_name}":
+      command     => "${php::params::module_enable_command} ${config_name}",
+      refreshonly => true,
+      notify      => Service[$service]
     }
   }
 }

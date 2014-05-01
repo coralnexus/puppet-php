@@ -10,7 +10,6 @@ class php::mod::uploadprogress (
   php::module { 'uploadprogress':
     ensure   => $ensure,
     provider => 'pecl',
-    conf_dir => $conf_dir,
-    content  => ''
+    conf_dir => $conf_dir
   }
 }

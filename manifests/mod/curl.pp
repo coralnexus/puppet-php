@@ -11,7 +11,6 @@ class php::mod::curl (
   php::module { $package:
     config_name  => 'curl',
     ensure       => $ensure,
-    conf_dir     => $conf_dir,
-    content      => ''
+    conf_dir     => $conf_dir
   }
 }

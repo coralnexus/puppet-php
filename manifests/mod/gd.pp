@@ -11,7 +11,6 @@ class php::mod::gd (
   php::module { $package:
     config_name  => 'gd',
     ensure   => $ensure,
-    conf_dir => $conf_dir,
-    content  => ''
+    conf_dir => $conf_dir
   }
 }
