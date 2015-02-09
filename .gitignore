@@ -1,2 +1,6 @@
+# Nucleon related
+.nucleon
+
+# Misc files
 *.swp
 pkg/
