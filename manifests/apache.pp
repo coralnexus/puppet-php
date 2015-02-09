@@ -150,8 +150,6 @@ class php::apache (
 
 ) inherits php::params::apache {
 
-  include php
-
   #-----------------------------------------------------------------------------
 
   if $service and defined(Service[$service]) {
@@ -169,7 +167,7 @@ class php::apache (
   package { 'php-apache':
     name    => $package,
     ensure  => $ensure,
-    require => Class['php'],
+    require => Class['::php'],
   }
 
   #-----------------------------------------------------------------------------

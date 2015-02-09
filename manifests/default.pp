@@ -73,7 +73,7 @@ class php::default {
   $user_agent                         = 'PHP'
   $default_socket_timeout             = 60
   $auto_detect_line_endings           = 'Off'
-  $date_timezone                      = ''
+  $date_timezone                      = 'EST'
   $date_default_latitude              = '31.7667'
   $date_default_longitude             = '35.2333'
   $date_sunrise_zenith                = '90.583333'
