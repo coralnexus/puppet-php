@@ -38,9 +38,8 @@ class php::mod::apc (
 
   #-----------------------------------------------------------------------------
 
-  php::module { 'apc':
+  php::module { 'php-apc':
     ensure         => $ensure,
-    provider       => 'pecl',
     extra_packages => $packages,
     extra_ensure   => $ensure,
     conf_dir       => $conf_dir,
