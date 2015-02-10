@@ -173,6 +173,7 @@ class php::params inherits php::default {
 
   $module_ensure                      = module_param('module_ensure')
   $module_package_prefix              = module_param('module_package_prefix')
+  $module_extension_prefix            = module_param('module_extension_prefix')
   $module_extra_ensure                = module_param('module_extra_ensure')
   $module_content                     = module_param('module_content')
   $module_provider                    = module_param('module_provider')

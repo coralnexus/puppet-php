@@ -233,6 +233,7 @@ class php::default {
   $pdo_mysql_default_socket           = ''
 
   $module_ensure                      = 'present'
+  $module_package_prefix              = ''
   $module_extra_ensure                = 'present'
   $module_content                     = ' '
   $module_provider                    = ''
@@ -247,7 +248,7 @@ class php::default {
       $gd_package                 = 'php5-gd'
       $curl_package               = 'php5-curl'
       $xmlrpc_package             = 'php5-xmlrpc'
-      $intl_package               = 'php5_intl'
+      $intl_package               = 'php5-intl'
       $imagick_package            = 'php5-imagick'
 
       $etc_dir                    = '/etc/php5'
@@ -257,7 +258,7 @@ class php::default {
       $cli_ini_template           = 'php/php.ini.erb'
 
       $module_enable_command      = '/usr/sbin/php5enmod'
-      $module_package_prefix      = '/usr/lib/php5/20121212'
+      $module_extension_prefix    = '/usr/lib/php5/20121212/'
 
       $doc_root                   = ''
       $user_dir                   = ''
@@ -280,7 +281,7 @@ class php::default {
       $mysql_module_configs       = [ 'mysql', 'mysqli', 'pdo', 'pdo_mysql' ]
       $mysql_template             = 'php/mysql.ini.erb'
 
-      $xdebug_zend_extension      = "${module_package_prefix}/xdebug.so"
+      $xdebug_zend_extension      = "${module_extension_prefix}xdebug.so"
       $xdebug_template            = 'php/xdebug.ini.erb'
       $xdebug_profiler_output_dir = '/var/log/profiles'
       $xdebug_trace_output_dir    = '/var/log/traces'

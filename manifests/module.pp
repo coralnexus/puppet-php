@@ -1,16 +1,17 @@
 
 define php::module (
 
-  $package        = $name,
-  $config_name    = $name,
-  $ensure         = $php::params::module_ensure,
-  $package_prefix = $php::params::module_package_prefix,
-  $extra_packages = [],
-  $extra_ensure   = $php::params::module_extra_ensure,
-  $content        = $php::params::module_content,
-  $provider       = $php::params::module_provider,
-  $conf_dir       = $php::params::conf_dir,
-  $service        = $php::params::service
+  $package          = $name,
+  $config_name      = $name,
+  $ensure           = $php::params::module_ensure,
+  $package_prefix   = $php::params::module_package_prefix,
+  $extension_prefix = $php::params::module_extension_prefix,
+  $extra_packages   = [],
+  $extra_ensure     = $php::params::module_extra_ensure,
+  $content          = $php::params::module_content,
+  $provider         = $php::params::module_provider,
+  $conf_dir         = $php::params::conf_dir,
+  $service          = $php::params::service
 
 ) {
 
@@ -60,7 +61,7 @@ define php::module (
     php::conf { $config_name:
       conf_dir => $conf_dir,
       content  => strip($content) ? {
-        ''       => "extension=${package_prefix}${config_name}.so",
+        ''       => "extension=${extension_prefix}${package_prefix}${config_name}.so",
         default  => $content,
       },
       service       => $service,
