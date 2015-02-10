@@ -12,6 +12,8 @@ class php::params inherits php::default {
   $gd_package                         = module_param('gd_package')
   $curl_package                       = module_param('curl_package')
   $xmlrpc_package                     = module_param('xmlrpc_package')
+  $intl_package                       = module_param('intl_package')
+  $imagick_package                    = module_param('imagick_package')
   $module_packages                    = module_param('module_packages')
   $pear_module_packages               = module_param('pear_module_packages')
   $pecl_module_packages               = module_param('pecl_module_packages')

@@ -248,6 +248,8 @@ class php::default {
       $gd_package                 = 'php5-gd'
       $curl_package               = 'php5-curl'
       $xmlrpc_package             = 'php5-xmlrpc'
+      $intl_package               = 'php5_intl'
+      $imagick_package            = 'php5-imagick'
 
       $etc_dir                    = '/etc/php5'
       $conf_dir                   = "${etc_dir}/mods-available"
@@ -256,6 +258,7 @@ class php::default {
       $cli_ini_template           = 'php/php.ini.erb'
 
       $module_enable_command      = '/usr/sbin/php5enmod'
+      $module_package_prefix      = '/usr/lib/php5/20121212'
 
       $doc_root                   = ''
       $user_dir                   = ''
@@ -278,7 +281,7 @@ class php::default {
       $mysql_module_configs       = [ 'mysql', 'mysqli', 'pdo', 'pdo_mysql' ]
       $mysql_template             = 'php/mysql.ini.erb'
 
-      $xdebug_zend_extension      = '/usr/lib/php5/20121212/xdebug.so'
+      $xdebug_zend_extension      = "${module_package_prefix}/xdebug.so"
       $xdebug_template            = 'php/xdebug.ini.erb'
       $xdebug_profiler_output_dir = '/var/log/profiles'
       $xdebug_trace_output_dir    = '/var/log/traces'
