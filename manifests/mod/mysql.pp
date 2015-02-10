@@ -1,7 +1,8 @@
 
 class php::mod::mysql (
 
-  $package                           = $php::params::mysql::package,
+  $config_name                       = $php::params::mysql::config_name,
+  $package_prefix                    = $php::params::mysql::package_prefix,
   $ensure                            = $php::params::mysql::ensure,
   $conf_dir                          = $php::params::conf_dir,
   $template                          = $php::params::mysql::template,
@@ -41,15 +42,16 @@ class php::mod::mysql (
 
   #-----------------------------------------------------------------------------
 
-  php::module { $package:
-    ensure   => $ensure,
-    conf_dir => $conf_dir,
-    content  => template($template),
+  php::module { $config_name:
+    package_prefix => $package_prefix,
+    ensure         => $ensure,
+    conf_dir       => $conf_dir,
+    content        => template($template),
   }
 
   php::module { $module_configs:
     ensure   => false,
     conf_dir => $conf_dir,
-    require  => Php::Module[$package],
+    require  => Php::Module[$config_name],
   }
 }

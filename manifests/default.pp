@@ -250,6 +250,7 @@ class php::default {
       $xmlrpc_package             = 'php5-xmlrpc'
       $intl_package               = 'php5-intl'
       $imagick_package            = 'php5-imagick'
+      $php_prefix                 = 'php5-'
 
       $etc_dir                    = '/etc/php5'
       $conf_dir                   = "${etc_dir}/mods-available"
@@ -273,12 +274,15 @@ class php::default {
       $apache_config_dir          = "${etc_dir}/apache2"
       $apache_ini                 = "${apache_config_dir}/php.ini"
 
+      $apc_config_name            = 'apcu'
+      $apc_package_prefix         = 'php5-'
       $apc_packages               = [ 'libpcre3-dev' ]
       $apc_template               = 'php/apc.ini.erb'
       $apc_mmap_file_mask         = '/tmp/apc.XXXXXX'
 
-      $mysql_package              = 'php5-mysql'
-      $mysql_module_configs       = [ 'mysql', 'mysqli', 'pdo', 'pdo_mysql' ]
+      $mysql_config_name          = 'mysql'
+      $mysql_package_prefix       = 'php5-'
+      $mysql_module_configs       = [ 'mysqli', 'pdo', 'pdo_mysql' ]
       $mysql_template             = 'php/mysql.ini.erb'
 
       $xdebug_zend_extension      = "${module_extension_prefix}xdebug.so"

@@ -61,7 +61,7 @@ define php::module (
     php::conf { $config_name:
       conf_dir => $conf_dir,
       content  => strip($content) ? {
-        ''       => "extension=${extension_prefix}${package_prefix}${config_name}.so",
+        ''       => "extension=${extension_prefix}${config_name}.so",
         default  => $content,
       },
       service       => $service,

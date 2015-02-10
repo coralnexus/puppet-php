@@ -1,6 +1,8 @@
 
 class php::mod::apc (
 
+  $config_name                = $php::params::apc::config_name,
+  $package_prefix             = $php::params::apc::package_prefix,
   $ensure                     = $php::params::apc::ensure,
   $packages                   = $php::params::apc::packages,
   $conf_dir                   = $php::params::conf_dir,
@@ -38,7 +40,8 @@ class php::mod::apc (
 
   #-----------------------------------------------------------------------------
 
-  php::module { 'php-apc':
+  php::module { $config_name:
+    package_prefix => $package_prefix,
     ensure         => $ensure,
     extra_packages => $packages,
     extra_ensure   => $ensure,

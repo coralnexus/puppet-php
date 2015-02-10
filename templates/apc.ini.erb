@@ -1,18 +1,18 @@
 ; Enable apc extension module
-extension = apc.so
+extension = <%= @config_name -%>.so
 
 ; Options for the APC module version >= 3.1.3
 
-; This can be set to 0 to disable APC. 
+; This can be set to 0 to disable APC.
 apc.enabled = <%= @apc_enabled %>
 
-; The number of shared memory segments to allocate for the compiler cache. 
+; The number of shared memory segments to allocate for the compiler cache.
 apc.shm_segments = <%= @apc_shm_segments %>
 
 ; The size of each shared memory segment in MB.
 apc.shm_size = <%= @apc_shm_size %>
 
-; A "hint" about the number of distinct source files that will be included or 
+; A "hint" about the number of distinct source files that will be included or
 ; requested on your web server. Set to zero or omit if you're not sure;
 apc.num_files_hint = <%= @apc_num_files_hint %>
 
@@ -31,7 +31,7 @@ apc.use_request_time = <%= @apc_use_request_time %>
 ; this cache entry slot is needed by another entry.
 apc.user_ttl = <%= @apc_user_ttl %>
 
-; The number of seconds that a cache entry may remain on the garbage-collection list. 
+; The number of seconds that a cache entry may remain on the garbage-collection list.
 apc.gc_ttl = <%= @apc_gc_ttl %>
 
 ; On by default, but can be set to off and used in conjunction with positive
@@ -41,7 +41,7 @@ apc.cache_by_default = <%= @apc_cache_by_default %>
 ; A comma-separated list of POSIX extended regular expressions.
 apc.filters = <%= @apc_filters %>
 
-; The mktemp-style file_mask to pass to the mmap module 
+; The mktemp-style file_mask to pass to the mmap module
 apc.mmap_file_mask = <%= @apc_mmap_file_mask %>
 
 ; This file_update_protection setting puts a delay on caching brand new files.
@@ -57,14 +57,14 @@ apc.max_file_size = <%= @apc_max_file_size %>
 ; Whether to stat the main script file and the fullpath includes.
 apc.stat = <%= @apc_stat %>
 
-; Vertification with ctime will avoid problems caused by programs such as svn or rsync by making 
+; Vertification with ctime will avoid problems caused by programs such as svn or rsync by making
 ; sure inodes havn't changed since the last stat. APC will normally only check mtime.
 apc.stat_ctime = <%= @apc_stat_ctime %>
 
 ; Whether to canonicalize paths in stat=0 mode or fall back to stat behaviour
 apc.canonicalize = <%= @apc_canonicalize %>
 
-; With write_lock enabled, only one process at a time will try to compile an 
+; With write_lock enabled, only one process at a time will try to compile an
 ; uncached script while the other processes will run uncached
 apc.write_lock = <%= @apc_write_lock %>
 

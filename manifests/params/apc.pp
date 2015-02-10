@@ -1,6 +1,8 @@
 
 class php::params::apc inherits php::params {
 
+  $config_name                = module_param('apc_config_name')
+  $package_prefix             = module_param('apc_package_prefix')
   $packages                   = module_param('apc_packages')
   $ensure                     = module_param('apc_ensure')
   $template                   = module_param('apc_template')

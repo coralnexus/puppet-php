@@ -1,7 +1,8 @@
 
 class php::params::mysql inherits php::params {
 
-  $package                           = module_param('mysql_package')
+  $config_name                       = module_param('mysql_config_name')
+  $package_prefix                    = module_param('mysql_package_prefix')
   $ensure                            = module_param('mysql_ensure')
   $module_configs                    = module_array('mysql_module_configs')
   $template                          = module_param('mysql_template')
