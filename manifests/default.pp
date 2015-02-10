@@ -233,7 +233,6 @@ class php::default {
   $pdo_mysql_default_socket           = ''
 
   $module_ensure                      = 'present'
-  $module_package_prefix              = ''
   $module_extra_ensure                = 'present'
   $module_content                     = ' '
   $module_provider                    = ''
