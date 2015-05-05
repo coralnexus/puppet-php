@@ -1,5 +1,6 @@
 # Nucleon related
 .nucleon
+.project_cache
 
 # Misc files
 *.swp
