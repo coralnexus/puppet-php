@@ -65,7 +65,7 @@ define php::module (
         default  => $content,
       },
       service       => $service,
-      update_notify => Exec["php-enable-${config_name}"]
+      update_notify => ensure($php::params::module_enable_command, Exec["php-enable-${config_name}"])
     }
   }
 
