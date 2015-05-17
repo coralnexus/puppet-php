@@ -5,6 +5,7 @@ class php::mod::mysql (
   $package_prefix                    = $php::params::mysql::package_prefix,
   $ensure                            = $php::params::mysql::ensure,
   $conf_dir                          = $php::params::conf_dir,
+  $extension_prefix                  = $php::params::module_extension_prefix,
   $template                          = $php::params::mysql::template,
   $module_configs                    = $php::params::mysql::module_configs,
   $sql_safe_mode                     = $php::params::mysql::sql_safe_mode,
